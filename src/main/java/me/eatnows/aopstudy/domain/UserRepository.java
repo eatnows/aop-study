@@ -30,6 +30,7 @@ public class UserRepository {
     }
 
     public void update(int id, UpdateReqDto dto) {
-        System.out.println("DB UPDATE");
+        throw new IllegalArgumentException("이셉션");
+//        System.out.println("DB UPDATE");
     }
 }
