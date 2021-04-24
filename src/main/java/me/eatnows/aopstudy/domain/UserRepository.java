@@ -21,7 +21,15 @@ public class UserRepository {
         return new User(id, "hello", "afasfasf", "3402305235s");
     }
 
-    public void save(User user) {
+    public void save(JoinReqDto dto) {
         System.out.println("DB INSERT");
+    }
+
+    public void delete(int id) {
+        System.out.println("DB DELETE");
+    }
+
+    public void update(int id, UpdateReqDto dto) {
+        System.out.println("DB UPDATE");
     }
 }

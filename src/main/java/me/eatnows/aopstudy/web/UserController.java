@@ -1,9 +1,10 @@
 package me.eatnows.aopstudy.web;
 
 import lombok.RequiredArgsConstructor;
-import me.eatnows.aopstudy.domain.User;
-import me.eatnows.aopstudy.domain.UserRepository;
+import me.eatnows.aopstudy.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,16 +17,16 @@ public class UserController {
 
     // http://localhost:8080/user
     @GetMapping("/user")
-    public List<User> findAll() {
+    public ApiResponseDto<List<User>> findAll() {
         System.out.println("findAll()");
-        return userRepository.findAll(); // MessageConverter (JavaObject -> JSON String)
+        return new ApiResponseDto<>(HttpStatus.OK.value(), userRepository.findAll()); // MessageConverter (JavaObject -> JSON String)
     }
 
     // http://localhost:8080/user/1
     @GetMapping("/user/{id}")
-    public User findById(@PathVariable int id) {
+    public ApiResponseDto<User> findById(@PathVariable int id) {
         System.out.println("findById() id : " + id);
-        return userRepository.findById(id);
+        return new ApiResponseDto<>(HttpStatus.OK.value(), userRepository.findById(id));
     }
 
     // http://localhost:8080/user/1
@@ -43,28 +44,32 @@ public class UserController {
 //        System.out.println("data : " + data);
 //    }
     // application/json => @RequestBody 애너테이션 + 오브젝트
-    public String save(@RequestBody User user) {
+    public ApiResponseDto<String> save(@RequestBody JoinReqDto joinReqDto) {
         System.out.println("save()");
-        System.out.println("user : " + user);
+        System.out.println("joinReqDto = " + joinReqDto);
 
-        userRepository.save(user);
+        userRepository.save(joinReqDto);
 
-        return "ok";
+        return new ApiResponseDto<>(HttpStatus.OK.value(), "ok");
     }
 
 
 
     // http://localhost:8080/user/1
     @DeleteMapping("/user/{id}")
-    public void delete(@PathVariable int id) {
+    public ApiResponseDto delete(@PathVariable int id) {
         System.out.println("Delete()");
+        userRepository.delete(id);
 
+        return new ApiResponseDto<>(HttpStatus.OK.value());
     }
 
     // http://localhost:8080/user/1
     @PutMapping("/user/{id}")
-    public void update(@PathVariable int id, String password, String phone) {
+    public ApiResponseDto update(@PathVariable int id, @RequestBody UpdateReqDto dto) {
         System.out.println("update()");
+        userRepository.update(id, dto);
 
+        return new ApiResponseDto<>(HttpStatus.OK.value());
     }
 }
