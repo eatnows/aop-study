@@ -5,9 +5,14 @@ import me.eatnows.aopstudy.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,7 +49,23 @@ public class UserController {
 //        System.out.println("data : " + data);
 //    }
     // application/json => @RequestBody 애너테이션 + 오브젝트
-    public ApiResponseDto<String> save(@RequestBody JoinReqDto joinReqDto) {
+    // BindingResult bindingResult (dto에 애너테이션으로 validation한 결과를 담아준다.)
+
+    // 같은 함수안에서도 어떨때엔 String을 반환하고, 어떨때엔 Map을 반환하는 등 상황에 따라 다를때는 <?>로 처리한다.
+    public ApiResponseDto<?> save(@Valid @RequestBody JoinReqDto joinReqDto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                // error.getField() : dto에 어떤 필드가 오류인지 username인지 password인지
+                // error.getDefaultMessage() : 애너테이션에 사용자가 걸어둔 메시지
+                errorMap.put(error.getField(), error.getDefaultMessage());
+            }
+
+            return new ApiResponseDto<>(HttpStatus.BAD_REQUEST.value(), errorMap);
+        }
+
         System.out.println("save()");
         System.out.println("joinReqDto = " + joinReqDto);
 
