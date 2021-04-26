@@ -87,7 +87,20 @@ public class UserController {
 
     // http://localhost:8080/user/1
     @PutMapping("/user/{id}")
-    public ApiResponseDto update(@PathVariable int id, @RequestBody UpdateReqDto dto) {
+    public ApiResponseDto update(@PathVariable int id, @Valid @RequestBody UpdateReqDto dto, BindingResult bindingResult) {
+
+//        if (bindingResult.hasErrors()) {
+//            Map<String, String> errorMap = new HashMap<>();
+//
+//            for (FieldError error : bindingResult.getFieldErrors()) {
+//                // error.getField() : dto에 어떤 필드가 오류인지 username인지 password인지
+//                // error.getDefaultMessage() : 애너테이션에 사용자가 걸어둔 메시지
+//                errorMap.put(error.getField(), error.getDefaultMessage());
+//            }
+//
+//            return new ApiResponseDto<>(HttpStatus.BAD_REQUEST.value(), errorMap);
+//        }
+
         System.out.println("update()");
         userRepository.update(id, dto);
 
