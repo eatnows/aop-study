@@ -1,0 +1,3 @@
+[2021-04-27 23:46:52:26158][http-nio-8080-exec-1] WARN  m.e.aopstudy.config.BindingAdvice - me.eatnows.aopstudy.web.UserController.save() => 필드 : username, 메시지 : 유저네임을 입력하세요.
+[2021-04-27 23:50:21:37572][http-nio-8080-exec-1] WARN  m.e.aopstudy.config.BindingAdvice - me.eatnows.aopstudy.web.UserController.save() => 필드 : username, 메시지 : 유저네임을 입력하세요.
+[2021-04-27 23:50:59:7096][http-nio-8080-exec-1] WARN  m.e.aopstudy.config.BindingAdvice - me.eatnows.aopstudy.web.UserController.save() => 필드 : username, 메시지 : 유저네임을 입력하세요.

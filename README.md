@@ -8,3 +8,8 @@ Joinpoint : Advice를 적용해야 되는 부분(ex: 필드, 메서드 / 스프�
 PointCut : JoinPoint의 부분으로 실제로 Advice가 적용된 부분
 Weaving : Advice를 핵심기능에 적용하는 행위
 ```
+
+
+### logback-spring
+`appender name="STDOUT"`은 콘솔창에 뿌려지는 것 <br>
+`appender name="FILE"`은 파일로 남기는 것 

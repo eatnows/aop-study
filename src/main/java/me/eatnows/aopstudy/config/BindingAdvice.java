@@ -6,11 +6,16 @@ import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,8 +24,15 @@ import java.util.Map;
 // component는 controller가 띄워진 후에 띄워진다.
 public class BindingAdvice {
 
+    private static final Logger log = LoggerFactory.getLogger(BindingAdvice.class);
+
     @Before("execution(* me.eatnows.aopstudy.web..*Controller.*(..))")
     public void testCheck() {
+        // request 값을 처리하고 싶으면
+        HttpServletRequest request =
+                ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        System.out.println("주소 : " + request.getRequestURI());
+
         System.out.println("로그를 남겼습니다.");
 
 //        return "Dssdgsdg";
@@ -61,8 +73,12 @@ public class BindingAdvice {
                 if (bindingResult.hasErrors()) {
                     Map<String, String> errorMap = new HashMap<>();
 
+                    // 클라이언트에서 유효성 검사를 하기 때문에 정상적인 접근에서는 문제가 될일 없지만, 잘못된 접근을 했을경우 에러가 발생할 수 있음
                     for (FieldError error : bindingResult.getFieldErrors()) {
                         errorMap.put(error.getField(), error.getDefaultMessage());
+                        // 로그 레벨 error, warn, info, debug
+                        log.warn(type + "." + method + "() => 필드 : " + error.getField() + ", 메시지 : " + error.getDefaultMessage());
+                        log.debug(type + "." + method + "() => 필드 : " + error.getField() + ", 메시지 : " + error.getDefaultMessage());
                     }
 
                     return new ApiResponseDto<>(HttpStatus.BAD_REQUEST.value(), errorMap);
